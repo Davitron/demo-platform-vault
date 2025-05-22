@@ -1,6 +1,6 @@
-vault:
-  server:
-    dev:
-      enabled: true # Enable development server Temporarily
-  ui:
-    enabled: true # Enable UI
+# vault:
+#   server:
+#     dev:
+#       enabled: true # Enable development server Temporarily
+#   ui:
+#     enabled: true # Enable UI

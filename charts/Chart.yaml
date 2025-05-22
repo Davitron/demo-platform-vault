@@ -3,7 +3,8 @@ name: demo-platform-vault
 version: 0.1.0
 description: A Helm chart for Kubernetes
 
-dependencies:
-  - name: vault
-    repository: https://helm.releases.hashicorp.com
-    version: 0.30.0
+dependencies: []
+  # - name: vault
+  #   repository: https://helm.releases.hashicorp.com
+  #   version: 0.30.0
+  # - 
