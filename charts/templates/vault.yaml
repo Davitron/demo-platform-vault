@@ -51,8 +51,8 @@ spec:
   default_lease_ttl: "1h" 
   max_lease_ttl: "1h"
 
-  # api_addr: "https://vault.vault.svc.cluster.local:8200"
-  # cluster_addr: "https://vault.vault.svc.cluster.local:8201"
+  api_addr: "https://vault.vault.svc.cluster.local:8200"
+  cluster_addr: "https://vault.vault.svc.cluster.local:8201"
 
   listener:
     tcp:
