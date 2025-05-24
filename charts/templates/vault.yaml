@@ -9,7 +9,7 @@ spec:
 
  serviceAccount: vault-sa
 
- istioEnabled: true
+ istioEnabled: false
 
  # Describe where you'd like to store the Vault unseal keys and root token.
  unsealConfig:
