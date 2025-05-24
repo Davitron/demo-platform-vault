@@ -1,4 +1,4 @@
-vault:
+operator:
   replicaCount: 2
   affinity:
     nodeAffinity:
@@ -9,3 +9,7 @@ vault:
                 operator: In
                 values:
                   - spot
+
+vault:
+  name: vault
+  iamRoleName: vault-kms-role
