@@ -3,7 +3,7 @@ kind: "Vault"
 metadata:
   name: "vault"
 spec:
-  size: 5
+  size: 3
   image: hashicorp/vault:1.19.4
   bankVaultsImage: banzaicloud/bank-vaults:latest
 
