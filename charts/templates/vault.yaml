@@ -23,9 +23,7 @@ spec:
       raft:
         path: /vault/raft
         retry_join:
-          auto_join: 'provider=k8s label_selector="app.kubernetes.io/name=vault" namespace=vault'
-          auto_join_ports: 8200
-          auto_join_scheme: "https"
+          leader_api_addr: https://vault-0.vault.svc.cluster.local:8200
     service_registration:
       kubernetes: 
         namespace: vault
