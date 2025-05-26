@@ -18,15 +18,20 @@ spec:
       s3Prefix: vault-root
       s3Region: eu-west-1
 
+  serviceRegistrationEnabled: true
+
   config:
     storage:
       raft:
         path: /vault/raft
-        retry_join:
-          leader_api_addr: https://vault-0.vault.svc.cluster.local:8200
-    service_registration:
-      kubernetes: 
-        namespace: vault
+    listener:
+      tcp:
+        address: "0.0.0.0:8200"
+        cluster_address: "0.0.0.0:8201"
+        tls_cert_file: /vault/tls/server.crt
+        tls_key_file: /vault/tls/server.key
+    api_addr: "https://vault.vault.svc.cluster.local:8200"
+    cluster_addr: "https://${.Env.POD_NAME}:8201"
     log_level: "info"
     log_requests_level: "off"
     log_format: json
@@ -37,14 +42,6 @@ spec:
     introspection_endpoint: true
     default_lease_ttl: "1h"
     max_lease_ttl: "1h"
-    api_addr: "https://vault.vault.svc.cluster.local:8200"
-    cluster_addr: "https://vault.vault.svc.cluster.local:8201"
-    listener:
-      tcp:
-        address: "0.0.0.0:8200"
-        cluster_address: "0.0.0.0:8201"
-        tls_cert_file: /vault/tls/server.crt
-        tls_key_file: /vault/tls/server.key
     ui: true
   volumeMounts:
     - name: vault-raft
