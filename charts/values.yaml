@@ -11,5 +11,17 @@ operator:
                   - spot
 
 vault:
+  enabled: false
   name: vault
+  imageVersion: 1.19.4
+  bankVaultsImageVersion: "latest"
+  replicaCount: 3
   iamRoleName: vault-kms-role
+  istioEnabled: false
+  unsealConfig: {}
+  config: {}
+  volumeMounts: []
+  volumeClaimTemplates: []
+  externalConfig: {}
+  affinity: {}
+  serviceRegistrationEnabled: true

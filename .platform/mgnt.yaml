@@ -1,0 +1,90 @@
+operator:
+  replicaCount: 2
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: karpenter.sh/capacity-type
+                operator: In
+                values:
+                  - spot
+
+vault:
+  enabled: true
+  name: vault
+  imageVersion: 1.19.4
+  bankVaultsImageVersion: "latest"
+  replicaCount: 3
+  iamRoleName: vault-kms-role
+  istioEnabled: false
+  unsealConfig:
+    aws:
+      kmsRegion: eu-west-1
+      kmsKeyId: 4057cc7f-2252-4db5-adad-4ba236334a66
+      s3Bucket: vault-seal-mgmt
+      s3Prefix: vault-root
+      s3Region: eu-west-1
+  config:
+    storage:
+      raft:
+        path: /vault/raft
+    listener:
+      tcp:
+        address: "0.0.0.0:8200"
+        cluster_address: "0.0.0.0:8201"
+        tls_cert_file: /vault/tls/server.crt
+        tls_key_file: /vault/tls/server.key
+    api_addr: "https://vault.vault.svc.cluster.local:8200"
+    cluster_addr: "https://${.Env.POD_NAME}:8201"
+    log_level: "info"
+    log_requests_level: "off"
+    log_format: json
+    log_file: /vault/logs/
+    log_rotate_bytes: 100000000
+    log_rotate_max_files: 9
+    disable_mlock: true
+    introspection_endpoint: true
+    default_lease_ttl: "1h"
+    max_lease_ttl: "1h"
+    ui: true
+  volumeMounts:
+    - name: vault-raft
+      mountPath: /vault/raft
+
+  volumeClaimTemplates:
+    - metadata:
+        name: vault-raft
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        volumeMode: Filesystem
+        storageClassName: gp2
+        resources:
+          requests:
+            storage: 1Gi
+  externalConfig:
+    policies:
+      - name: allow_secrets
+        rules: |
+          path "secret/*" {
+            capabilities = ["create", "read", "update", "delete", "list"]
+          }
+    auth:
+      - type: kubernetes
+        roles:
+          - name: default
+            bound_service_account_names: default
+            bound_service_account_namespaces: default
+            policies: allow_secrets
+            ttl: 1h
+  affinity:
+    nodeAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+        nodeSelectorTerms:
+          - matchExpressions:
+              - key: karpenter.sh/capacity-type
+                operator: In
+                values:
+                  - spot
+  serviceRegistrationEnabled: true

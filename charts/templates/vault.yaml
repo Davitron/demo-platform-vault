@@ -1,76 +1,37 @@
+{{- if .Values.vault.enabled }}
 apiVersion: "vault.banzaicloud.com/v1alpha1"
 kind: "Vault"
 metadata:
   name: "vault"
 spec:
-  size: 3
-  image: hashicorp/vault:1.19.4
-  bankVaultsImage: banzaicloud/bank-vaults:latest
-
+  size: {{ default 3 .Values.vault.replicaCount }}
+  image: hashicorp/vault:{{ .Values.vault.imageVersion | default "1.14.0" }}
+  bankVaultsImage: banzaicloud/bank-vaults:{{ .Values.vault.bankVaultsImageVersion | default "latest" }}
   serviceAccount: vault-sa
-  istioEnabled: false
-
+  istioEnabled: {{ .Values.vault.istioEnabled | default false }}
+  serviceRegistrationEnabled: {{ .Values.vault.serviceRegistrationEnabled | default true }}
+  {{- with .Values.vault.unsealConfig }}
   unsealConfig:
-    aws:
-      kmsRegion: eu-west-1
-      kmsKeyId: 4057cc7f-2252-4db5-adad-4ba236334a66
-      s3Bucket: vault-seal-mgmt
-      s3Prefix: vault-root
-      s3Region: eu-west-1
-
-  serviceRegistrationEnabled: true
-
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.vault.config}}
   config:
-    storage:
-      raft:
-        path: /vault/raft
-    listener:
-      tcp:
-        address: "0.0.0.0:8200"
-        cluster_address: "0.0.0.0:8201"
-        tls_cert_file: /vault/tls/server.crt
-        tls_key_file: /vault/tls/server.key
-    api_addr: "https://vault.vault.svc.cluster.local:8200"
-    cluster_addr: "https://${.Env.POD_NAME}:8201"
-    log_level: "info"
-    log_requests_level: "off"
-    log_format: json
-    log_file: /vault/logs/
-    log_rotate_bytes: 100000000
-    log_rotate_max_files: 9
-    disable_mlock: true
-    introspection_endpoint: true
-    default_lease_ttl: "1h"
-    max_lease_ttl: "1h"
-    ui: true
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.vault.volumeMounts }}
   volumeMounts:
-    - name: vault-raft
-      mountPath: /vault/raft
-
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.vault.volumeClaimTemplates }}
   volumeClaimTemplates:
-    - metadata:
-        name: vault-raft
-      spec:
-        accessModes:
-          - ReadWriteOnce
-        volumeMode: Filesystem
-        storageClassName: gp2
-        resources:
-          requests:
-            storage: 1Gi
-
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.vault.externalConfig }}
   externalConfig:
-    policies:
-      - name: allow_secrets
-        rules: |
-          path "secret/*" {
-            capabilities = ["create", "read", "update", "delete", "list"]
-          }
-    auth:
-      - type: kubernetes
-        roles:
-          - name: default
-            bound_service_account_names: default
-            bound_service_account_namespaces: default
-            policies: allow_secrets
-            ttl: 1h
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.vault.affinity }}
+  affinity:
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
+{{- end }}
