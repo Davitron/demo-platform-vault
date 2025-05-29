@@ -88,14 +88,45 @@ vault:
           path "secret/*" {
             capabilities = ["create", "read", "update", "delete", "list"]
           }
+      - name: allow_pki
+        rules: |
+          path "pki/*" {
+            capabilities = ["create", "read", "update", "delete", "list"]
+          }
     auth:
       - type: kubernetes
         roles:
           - name: default
             bound_service_account_names: default
             bound_service_account_namespaces: default
-            policies: allow_secrets
+            policies:
+              - allow_secrets
+              - allow_pki
             ttl: 1h
+
+    secrets:
+      - type: pki
+        description: Vault PKI Backend
+        path: pki_int
+        config:
+          default_lease_ttl: 72h
+          max_lease_ttl: 87600h
+        configuration:
+          config:
+            - name: urls
+              issuing_certificates: https://vault.vault.svc.cluster.local:8200/v1/pki_int/ca
+              crl_distribution_points: https://vault.vault.svc.cluster.local:8200/v1/pki_int/crl
+          root/generate:
+            - name: internal
+              common_name: vault Root CA
+              ttl: 87600h
+          roles:
+            - name: vault-server
+              allowed_domains: vault,vault.vault,vault.vault.svc,vault.vault.svc.cluster.local,vault.mgnt.thecloudsninja.com
+              allow_subdomains: true
+              generate_lease: true
+              max_ttl: 72h
+
   affinity:
     nodeAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
