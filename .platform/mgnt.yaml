@@ -29,7 +29,7 @@ operator:
 
 
 vault:
-  enabled: false
+  enabled: true
   name: vault
   imageVersion: 1.19.4
   bankVaultsImageVersion: "latest"
@@ -37,12 +37,15 @@ vault:
   iamRoleName: vault-kms-role
   istioEnabled: true
   unsealConfig:
-    aws:
-      kmsRegion: eu-west-1
-      kmsKeyId: 4057cc7f-2252-4db5-adad-4ba236334a66
-      s3Bucket: vault-seal-mgmt
-      s3Prefix: vault-root
-      s3Region: eu-west-1
+    kubernetes:
+      secretNamespace: vault
+    # aws:
+    #   kmsRegion: eu-west-1
+    #   kmsKeyId: 4057cc7f-2252-4db5-adad-4ba236334a66
+    #   s3Bucket: vault-seal-mgmt
+    #   s3Prefix: "vault-root/"
+    #   s3Region: eu-west-1
+
   config:
     storage:
       raft:
@@ -109,6 +112,11 @@ vault:
             ttl: 1h
 
     secrets:
+      - path: secret
+        type: kv
+        description: General secrets.
+        options:
+          version: 2
       - type: pki
         description: Vault PKI Backend
         path: pki_int
