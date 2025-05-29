@@ -97,8 +97,12 @@ vault:
       - type: kubernetes
         roles:
           - name: default
-            bound_service_account_names: default
-            bound_service_account_namespaces: default
+            bound_service_account_names:
+              - default
+              - vault-sa
+            bound_service_account_namespaces:
+              - default
+              - vault
             policies:
               - allow_secrets
               - allow_pki
