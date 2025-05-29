@@ -31,6 +31,10 @@ spec:
   externalConfig:
     {{ toYaml . | nindent 4 }}
   {{- end }}
+  {{- with .Values.vault.tlsAdditionalHosts }}
+  tlsAdditionalHosts:
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
   {{- with .Values.vault.affinity }}
   affinity:
     {{ toYaml . | nindent 4 }}

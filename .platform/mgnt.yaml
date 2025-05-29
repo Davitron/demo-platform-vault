@@ -106,3 +106,5 @@ vault:
                 values:
                   - spot
   serviceRegistrationEnabled: true
+  tlsAdditionalHosts:
+    - vault.mgnt.thecloudsninja.com

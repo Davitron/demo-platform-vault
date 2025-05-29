@@ -25,4 +25,5 @@ vault:
   volumeClaimTemplates: []
   externalConfig: {}
   affinity: {}
-  serviceRegistrationEnabled: true
+  serviceRegistrationEnabled: true\
+  tlsAdditionalHosts: []
