@@ -1,0 +1,11 @@
+{{- with .Values.operator.networks }}
+{{- range .vservice }}
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: {{ .name }}
+spec:
+{{ toYaml .spec | nindent 2 }}
+---
+{{- end }}
+{{- end }}

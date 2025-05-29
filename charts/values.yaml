@@ -9,6 +9,7 @@ operator:
                 operator: In
                 values:
                   - spot
+  networks: {}
 
 vault:
   enabled: false
