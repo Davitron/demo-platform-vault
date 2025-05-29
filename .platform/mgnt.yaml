@@ -29,7 +29,7 @@ operator:
 
 
 vault:
-  enabled: true
+  enabled: false
   name: vault
   imageVersion: 1.19.4
   bankVaultsImageVersion: "latest"
@@ -69,6 +69,8 @@ vault:
     default_lease_ttl: "1h"
     max_lease_ttl: "1h"
     ui: true
+  caNamespaces:
+    - "*"
   volumeMounts:
     - name: vault-raft
       mountPath: /vault/raft

@@ -15,6 +15,10 @@ spec:
   unsealConfig:
     {{ toYaml . | nindent 4 }}
   {{- end }}
+  {{- with .Values.caNamespaces }}
+  caNamespaces:
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
   {{- with .Values.vault.config}}
   config:
     {{ toYaml . | nindent 4 }}
