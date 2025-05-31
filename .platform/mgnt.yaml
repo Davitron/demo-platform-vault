@@ -30,7 +30,7 @@ operator:
 
 
 vault:
-  enabled: false
+  enabled: true
   name: vault
   imageVersion: 1.19.4
   bankVaultsImageVersion: "latest"
@@ -38,10 +38,9 @@ vault:
   iamRoleName: vault-kms-role
   istioEnabled: true
   servicePorts:
-    https: 8200
-    cluster: 8201
-    extapi: 8300
-    extclu: 8301
+    api-port: 8200
+    cluster-port: 8201
+    external-port: 8300
   unsealConfig:
     kubernetes:
       secretNamespace: vault
