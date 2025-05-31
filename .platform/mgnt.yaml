@@ -26,7 +26,7 @@ operator:
                 - destination:
                     host: vault.vault.svc.cluster.local
                     port:
-                      number: 8200
+                      number: 8300
 
 
 vault:
@@ -36,7 +36,7 @@ vault:
   bankVaultsImageVersion: "latest"
   replicaCount: 3
   iamRoleName: vault-kms-role
-  istioEnabled: true
+  istioEnabled: false
   servicePorts:
     api-port: 8200
     cluster-port: 8201
