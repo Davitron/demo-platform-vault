@@ -14,13 +14,14 @@ operator:
       - name: vault-public
         spec:
           gateways:
-            - istio-gateway/mgnt-gateway
+            - istio-gateway/vault-gateway
           hosts:
             - vault.mgnt.thecloudsninja.com
-          http:
+          tls:
             - match:
-                - uri:
-                    prefix: /
+                - port: 443
+                  sniHosts:
+                    - vault.mgnt.thecloudsninja.com
               route:
                 - destination:
                     host: vault.vault.svc.cluster.local
@@ -29,7 +30,7 @@ operator:
 
 
 vault:
-  enabled: false
+  enabled: true
   name: vault
   imageVersion: 1.19.4
   bankVaultsImageVersion: "latest"

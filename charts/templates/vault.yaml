@@ -10,6 +10,7 @@ spec:
   serviceAccount: vault-sa
   istioEnabled: {{ .Values.vault.istioEnabled | default false }}
   serviceRegistrationEnabled: {{ .Values.vault.serviceRegistrationEnabled | default true }}
+  existingTlsSecretName: {{ .Values.vault.existingTlsSecretName | default "vault-bootstrap-tls" }}
   serviceType: ClusterIP
   {{- with .Values.vault.unsealConfig }}
   unsealConfig:
