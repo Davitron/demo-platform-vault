@@ -37,7 +37,11 @@ vault:
   replicaCount: 3
   iamRoleName: vault-kms-role
   istioEnabled: true
-  existingTlsSecretName: vvault-bootstrap-tls
+  servicePorts:
+    https: 8200
+    cluster: 8201
+    extapi: 8300
+    extclu: 8301
   unsealConfig:
     kubernetes:
       secretNamespace: vault
@@ -53,11 +57,16 @@ vault:
       raft:
         path: /vault/raft
     listener:
-      tcp:
-        address: "0.0.0.0:8200"
-        cluster_address: "0.0.0.0:8201"
-        tls_cert_file: /vault/tls/server.crt
-        tls_key_file: /vault/tls/server.key
+      - tcp:
+          address: "0.0.0.0:8200"
+          cluster_address: "0.0.0.0:8201"
+          tls_cert_file: /vault/tls/server.crt
+          tls_key_file: /vault/tls/server.key
+      - tcp:
+          address: "0.0.0.0:8300"
+          cluster_address: "0.0.0.0:8301"
+          tls_cert_file: /etc/ingress-tls/tls.crt
+          tls_key_file: /etc/ingress-tls/tls.key
     api_addr: "https://vault.vault.svc.cluster.local:8200"
     cluster_addr: "https://${.Env.POD_NAME}:8201"
     log_level: "info"
@@ -74,14 +83,15 @@ vault:
   caNamespaces:
     - "*"
   volumes:
-    - name: bootstrap-tls
+    - name: ingress-tls
       secret:
-        secretName: vvault-bootstrap-tls
+        defaultMode: 420
+        secretName: wildcard-cert-mgnt-thecloudsninja-com
   volumeMounts:
     - name: vault-raft
       mountPath: /vault/raft
-    - name: bootstrap-tls
-      mountPath: /vault/userconfig/tls
+    - name: ingress-tls
+      mountPath: /etc/ingress-tls
 
   volumeClaimTemplates:
     - metadata:
@@ -161,5 +171,4 @@ vault:
                 values:
                   - spot
   serviceRegistrationEnabled: true
-  tlsAdditionalHosts:
-    - vault.mgnt.thecloudsninja.com
+  tlsAdditionalHosts: []
