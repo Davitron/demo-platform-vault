@@ -30,7 +30,7 @@ operator:
 
 
 vault:
-  enabled: true
+  enabled: false
   name: vault
   imageVersion: 1.19.4
   bankVaultsImageVersion: "latest"
