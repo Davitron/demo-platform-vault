@@ -36,6 +36,7 @@ vault:
   replicaCount: 3
   iamRoleName: vault-kms-role
   istioEnabled: true
+  existingTlsSecretName: vvault-bootstrap-tls
   unsealConfig:
     kubernetes:
       secretNamespace: vault
@@ -54,8 +55,8 @@ vault:
       tcp:
         address: "0.0.0.0:8200"
         cluster_address: "0.0.0.0:8201"
-        tls_cert_file: /vault/userconfig/tls/tls.crt
-        tls_key_file: /vault/userconfig/tls/tls.key
+        tls_cert_file: /vault/tls/server.crt
+        tls_key_file: /vault/tls/server.key
     api_addr: "https://vault.vault.svc.cluster.local:8200"
     cluster_addr: "https://${.Env.POD_NAME}:8201"
     log_level: "info"
