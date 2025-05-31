@@ -71,9 +71,15 @@ vault:
     ui: true
   caNamespaces:
     - "*"
+  volumes:
+    - name: bootstrap-tls
+      secret:
+        secretName: vvault-bootstrap-tls
   volumeMounts:
     - name: vault-raft
       mountPath: /vault/raft
+    - name: bootstrap-tls
+      mountPath: /vault/userconfig/tls
 
   volumeClaimTemplates:
     - metadata:
@@ -86,6 +92,8 @@ vault:
         resources:
           requests:
             storage: 1Gi
+  securityContext:
+    fsGroup: 1000
   externalConfig:
     policies:
       - name: allow_secrets

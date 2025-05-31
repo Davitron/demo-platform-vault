@@ -23,12 +23,20 @@ spec:
   config:
     {{ toYaml . | nindent 4 }}
   {{- end }}
+  {{- with .Values.vault.volumes }}
+  volumes:
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
   {{- with .Values.vault.volumeMounts }}
   volumeMounts:
     {{ toYaml . | nindent 4 }}
   {{- end }}
   {{- with .Values.vault.volumeClaimTemplates }}
   volumeClaimTemplates:
+    {{ toYaml . | nindent 4 }}
+  {{- end }}
+  {{- with .Values.vault.securityContext }}
+  securityContext:
     {{ toYaml . | nindent 4 }}
   {{- end }}
   {{- with .Values.vault.externalConfig }}
