@@ -1,3 +1,4 @@
+{{- if .Values.vault.enabled }}
 apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
@@ -11,22 +12,19 @@ spec:
     - vault.mgnt.thecloudsninja.com        # external DNS
     - vault
     - vault.vault                   # svc DNS
-    - vault.vault.svc
     - vault.vault.svc.cluster.local # full internal DNS
     - vault-0                           # pod DNS
     - vault-0.vault
-    - vault-0.vault.svc
     - vault-0.vault.svc.cluster.local
     - vault-1
     - vault-1.vault
-    - vault-1.vault.svc
     - vault-1.vault.svc.cluster.local
     - vault-2
     - vault-2.vault
-    - vault-2.vault.svc
     - vault-2.vault.svc.cluster.local
   ipAddresses:
     - 127.0.0.1
   issuerRef:
     name: vault-selfsigned
     kind: Issuer
+{{- end }}
