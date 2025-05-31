@@ -1,0 +1,32 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: vault-bootstrap-cert
+spec:
+  secretName: vvault-bootstrap-tls
+  duration: 8760h # 1 year
+  renewBefore: 720h # 30 days
+  commonName: vault.mgnt.thecloudsninja.com
+  dnsNames:
+    - vault.mgnt.thecloudsninja.com        # external DNS
+    - vault
+    - vault.vault                   # svc DNS
+    - vault.vault.svc
+    - vault.vault.svc.cluster.local # full internal DNS
+    - vault-0                           # pod DNS
+    - vault-0.vault
+    - vault-0.vault.svc
+    - vault-0.vault.svc.cluster.local
+    - vault-1
+    - vault-1.vault
+    - vault-1.vault.svc
+    - vault-1.vault.svc.cluster.local
+    - vault-2
+    - vault-2.vault
+    - vault-2.vault.svc
+    - vault-2.vault.svc.cluster.local
+  ipAddresses:
+    - 127.0.0.1
+  issuerRef:
+    name: vault-selfsigned
+    kind: Issuer
